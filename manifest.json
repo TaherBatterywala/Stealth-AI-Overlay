@@ -1,0 +1,80 @@
+{
+  "manifest_version": 3,
+  "name": "Stealth AI Overlay",
+  "version": "1.0.0",
+  "description": "A stealth AI assistant overlay that maintains host-page focus illusion via Shadow DOM isolation and API spoofing.",
+
+  "permissions": [
+    "tabs",
+    "scripting",
+    "storage",
+    "alarms"
+  ],
+
+  "host_permissions": [
+    "<all_urls>"
+  ],
+
+  "background": {
+    "service_worker": "background/service-worker.js",
+    "type": "module"
+  },
+
+  "content_scripts": [
+    {
+      "comment": "ISOLATED WORLD — Overlay bootstrap, input routing. Runs on all host pages.",
+      "matches": ["<all_urls>"],
+      "exclude_matches": ["https://chatgpt.com/*"],
+      "js": [
+        "overlay/shadow-ui.js",
+        "overlay/chat-controller.js",
+        "overlay/content-bootstrap.js",
+        "input-router/event-interceptor.js"
+      ],
+      "run_at": "document_end",
+      "all_frames": false
+    },
+    {
+      "comment": "MAIN WORLD — API Spoofer. Runs before any host scripts execute.",
+      "matches": ["<all_urls>"],
+      "exclude_matches": ["https://chatgpt.com/*"],
+      "js": [
+        "spoofer/main-world-injector.js"
+      ],
+      "world": "MAIN",
+      "run_at": "document_start",
+      "all_frames": false
+    },
+    {
+      "comment": "ISOLATED WORLD — Hidden Tab Puppeteer. Runs ONLY inside the hidden ChatGPT tab.",
+      "matches": ["https://chatgpt.com/*"],
+      "js": [
+        "puppeteer/ai-tab-automator.js"
+      ],
+      "run_at": "document_idle",
+      "all_frames": false
+    }
+  ],
+
+  "commands": {
+    "toggle-overlay": {
+      "suggested_key": {
+        "default": "Alt+Shift+A",
+        "mac": "Alt+Shift+A"
+      },
+      "description": "Toggle the Stealth AI Overlay on/off"
+    }
+  },
+
+  "action": {
+    "default_title": "Toggle Stealth AI Overlay (Alt+Shift+A)"
+  },
+
+  "web_accessible_resources": [
+    {
+      "comment": "Expose assets (icons, fonts) to content script contexts if needed.",
+      "resources": ["assets/*"],
+      "matches": ["<all_urls>"]
+    }
+  ]
+}

@@ -1,0 +1,13 @@
+/*
+ * overlay/overlay.css
+ * ─────────────────────────────────────────────────────────────────────────────
+ * PHASE 2 — Scoped styles for the Shadow DOM overlay UI.
+ *
+ * Loaded via the Constructable Stylesheets API (new CSSStyleSheet()) and
+ * applied with shadowRoot.adoptedStyleSheets = [sheet].
+ * These styles are 100% isolated from the host page — no bleed in or out.
+ *
+ * Design tokens, layout, animations, and theme variables will be defined here.
+ * ─────────────────────────────────────────────────────────────────────────────
+ * STATUS: STUB — Implementation begins in Phase 2.
+ */
